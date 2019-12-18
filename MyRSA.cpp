@@ -1,14 +1,14 @@
 #include <iostream>
 #include <cmath>
 
-class RSA{
+class MyRSA{
 private:
     int e;
     int n;
     int d;
 
 public:
-    RSA(int e_, int n_) : e{e_}, n{n_} {}
+    MyRSA(int e_, int n_) : e{e_}, n{n_} {}
 
     Message encrypt(Message m){
         Message encrypted = new Message();
@@ -17,6 +17,9 @@ public:
             enc = enc % n;
             encrypted.add_fragment(enc);
         }
+    }
+
+    std::string encrypt(std::string m){
     }
 
     Message decrypt(Message m){
