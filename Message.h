@@ -12,4 +12,8 @@ public:
     void read(std::string input_file);
     void log();
     void print();
+
+private:
+    std::string read_content(std::string input_file);
+    std::vector<std::string> fragment_input(std::string content);
 };

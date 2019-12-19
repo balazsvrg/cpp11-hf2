@@ -3,9 +3,10 @@
 #include "Message.h"
 
 int main(void){
-    Message m(12);
+    Message m(16);
 
     m.read("TEST");
-    //m.print();
-    m.log();
+    //m.log();
+    m.print();
+    
 }

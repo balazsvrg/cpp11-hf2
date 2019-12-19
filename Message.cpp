@@ -8,18 +8,20 @@
 Message::Message(int key_size) : frag_size{(key_size / 3) - 1} {}
 
 void Message::read(std::string input_file){
-    std::ifstream ifs(input_file);
-    char* tmp = new char[frag_size];
-    std::stringstream ss;
+    std::string tmp = read_content(input_file);
+    std::vector<std::string> stringfrags = fragment_input(tmp);
 
-    while(ifs.read(tmp, frag_size-1)){
-        for(char *c = tmp; c < tmp + frag_size-1; ++c ){
-            ss << std::setfill('0') << std::setw(3) << std::dec << (int) *c;
+    for (std::string s : stringfrags){
+        std::stringstream ss;
+        for (unsigned char c : s){
+            ss << std::setfill('0') << std::setw(3) << std::dec << (int) c;
         }
         std::string fragment;
-        fragment += "999";
-        ss >> fragment;
-        fragments.push_back(std::stoi(fragment));
+        fragment += "111";
+        std::string ize;
+        ss >> ize;
+        fragment += ize;
+        fragments.push_back(std::stoull(fragment));
     }
 }
 
@@ -30,17 +32,34 @@ void Message::log(){
 }
 
 void Message::print(){
+    std::string back;
     for (unsigned long long int f : fragments){
         std::string tmp = std::to_string(f);
-        std::string back;
-        for (int i = 1; i < frag_size-1; ++i){
+        for (size_t i = 1; i < tmp.size()/3; ++i){
             std::string letter;
-            for(int j = 0; j < 3; ++j){
-                letter.push_back(tmp[3*i + j]);
-            }
-            std::cout << "boo";
-            back += std::stoi(letter);
+            letter = tmp.substr(3*i, 3);
+            back.push_back((char)std::stoi(letter));
         }
-        std::cout << back << std::endl;
     }
+    std::cout << back << std::endl;
+}
+
+std::string Message::read_content(std::string input_file){
+    std::ifstream ifs(input_file);
+    std::stringstream ss;
+
+    unsigned char c;
+    std::string filecontent;
+    while(ifs >> std::noskipws >> c){
+        filecontent.push_back(c);
+    }
+    return filecontent;
+}
+
+std::vector<std::string> Message::fragment_input(std::string content){
+    std::vector<std::string> result;
+    for (size_t i = 0; i < content.length(); i += (frag_size-1)) {
+        result.push_back(content.substr(i, frag_size-1));
+    }
+    return result;
 }
