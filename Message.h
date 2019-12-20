@@ -1,19 +1,33 @@
+#ifndef MESSAGE_H
+#define MESSAGE_H
+
 #include <vector>
 #include <string>
+#include <cstdint>
 
-class Message{
-private:
-    std::vector<unsigned long long int> fragments;
-    int frag_size;
-    
-public:
-    Message(int key_size);
 
-    void read(std::string input_file);
-    void log();
-    void print();
+namespace rsa{ 
+    class Message{
+    private:
+        std::vector<uint64_t> fragments;
+        size_t frag_size_bytes;
+        
+    public:
+        Message();
 
-private:
-    std::string read_content(std::string input_file);
-    std::vector<std::string> fragment_input(std::string content);
-};
+        void read(std::string input_file);
+        void log();
+        void print();
+
+        size_t fragcount();
+
+        void add_fragment(uint64_t f);
+
+        uint64_t operator[](size_t idx);
+        //Message operator=(Message& other);
+    private:
+        std::string read_content(std::string input_file);
+        std::vector<std::string> fragment_input(std::string content);
+    };
+}
+#endif

@@ -5,9 +5,9 @@
 
 #include "Message.h"
 
-Message::Message(int key_size) : frag_size{(key_size / 3) - 1} {}
+rsa::Message::Message() : frag_size_bytes{4} {}
 
-void Message::read(std::string input_file){
+void rsa::Message::read(std::string input_file){
     std::string tmp = read_content(input_file);
     std::vector<std::string> stringfrags = fragment_input(tmp);
 
@@ -18,22 +18,22 @@ void Message::read(std::string input_file){
         }
         std::string fragment;
         fragment += "111";
-        std::string ize;
-        ss >> ize;
-        fragment += ize;
-        fragments.push_back(std::stoull(fragment));
+        std::string data;
+        ss >> data;
+        fragment += data;
+        fragments.push_back(stoull(fragment));
     }
 }
 
-void Message::log(){
-    for (unsigned long long int f : fragments){
+void rsa::Message::log(){
+    for (uint64_t f : fragments){
         std::cout << f << std::endl;
     }
 }
 
-void Message::print(){
+void rsa::Message::print(){
     std::string back;
-    for (unsigned long long int f : fragments){
+    for (uint64_t f : fragments){
         std::string tmp = std::to_string(f);
         for (size_t i = 1; i < tmp.size()/3; ++i){
             std::string letter;
@@ -44,7 +44,15 @@ void Message::print(){
     std::cout << back << std::endl;
 }
 
-std::string Message::read_content(std::string input_file){
+size_t rsa::Message::fragcount(){
+    return fragments.size();
+}
+
+void rsa::Message::add_fragment(uint64_t f){
+    fragments.push_back(f);
+}
+
+std::string rsa::Message::read_content(std::string input_file){
     std::ifstream ifs(input_file);
     std::stringstream ss;
 
@@ -56,10 +64,23 @@ std::string Message::read_content(std::string input_file){
     return filecontent;
 }
 
-std::vector<std::string> Message::fragment_input(std::string content){
+std::vector<std::string> rsa::Message::fragment_input(std::string content){
     std::vector<std::string> result;
-    for (size_t i = 0; i < content.length(); i += (frag_size-1)) {
-        result.push_back(content.substr(i, frag_size-1));
+    for (size_t i = 0; i < content.length(); i += (frag_size_bytes-1)) {
+        result.push_back(content.substr(i, frag_size_bytes-1));
     }
     return result;
+}
+/*
+rsa::Message rsa::Message::operator=(rsa::Message& other){
+    fragments = other.fragments;
+    frag_size_bytes = other.frag_size_bytes;
+
+    return *this;
+}*/
+
+uint64_t rsa::Message::operator[](size_t idx) {
+    if(idx > 0 && idx < fragments.size())
+        return fragments[idx];
+    return -1;
 }
