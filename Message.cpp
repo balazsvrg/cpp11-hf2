@@ -71,13 +71,6 @@ std::vector<std::string> rsa::Message::fragment_input(std::string content){
     }
     return result;
 }
-/*
-rsa::Message rsa::Message::operator=(rsa::Message& other){
-    fragments = other.fragments;
-    frag_size_bytes = other.frag_size_bytes;
-
-    return *this;
-}*/
 
 uint64_t rsa::Message::operator[](size_t idx) {
     if(idx > 0 && idx < fragments.size())

@@ -20,11 +20,9 @@ namespace rsa{
         void print();
 
         size_t fragcount();
-
         void add_fragment(uint64_t f);
 
         uint64_t operator[](size_t idx);
-        //Message operator=(Message& other);
     private:
         std::string read_content(std::string input_file);
         std::vector<std::string> fragment_input(std::string content);
